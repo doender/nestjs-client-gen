@@ -52,7 +52,6 @@
         "@types/yargs": "^17.0.7",
         "husky": "^7.0.4",
         "size-limit": "^7.0.3",
-        "ts-morph": "^13.0.2",
         "tsdx": "^0.14.1",
         "tslib": "^2.3.1",
         "typescript": "^3.9.10"
@@ -60,6 +59,7 @@
     "dependencies": {
         "code-block-writer": "^11.0.0",
         "ora": "^4.0.2",
-        "yargs": "^17.3.0"
+        "yargs": "^17.3.0",
+        "ts-morph": "^13.0.2"
     }
 }
