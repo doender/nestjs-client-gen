@@ -1,5 +1,5 @@
 {
-    "version": "0.1.0",
+    "version": "0.1.1",
     "license": "MIT",
     "main": "dist/cli.js",
     "typings": "dist/index.d.ts",
@@ -59,7 +59,7 @@
     "dependencies": {
         "code-block-writer": "^11.0.0",
         "ora": "^4.0.2",
-        "yargs": "^17.3.0",
-        "ts-morph": "^13.0.2"
+        "ts-morph": "^13.0.2",
+        "yargs": "^17.3.0"
     }
 }
