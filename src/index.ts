@@ -37,6 +37,9 @@ const main = async () => {
     clientSourceFile.fixMissingImports();
     clientSourceFile.organizeImports();
     clientSourceFile.fixUnusedIdentifiers();
+    clientSourceFile.formatText({
+        indentSize: 2,
+    });
     await clientSourceFile.save();
     spinner.succeed('Client generated');
 };

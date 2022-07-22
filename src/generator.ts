@@ -29,33 +29,38 @@ const writeEndpoint = (writer: CodeBlockWriter, endpoint: ApiEndpoint) => {
         ...unrollParams(endpoint.query), // todo: check if optional
     ];
     writer
+        .indent()
+
         // export const getOrder = async (orderId: string): Promise<Order> =>
-        .write(`export const ${endpoint.functionName} = (${functionParams.join(', ')}): Promise<${endpoint.returnType}> =>`)
-        .block(() => {
-            writer
-                // return client.get<Order>(`/orders/${orderId}`
-                .write(
-                    `return client.${endpoint.method.toLowerCase()}<${endpoint.returnType}>(\`${interpolateParams(
-                        endpoint.path,
-                        endpoint.params
-                    )}\``
-                )
-                .conditionalWrite(
-                    [HttpVerb.Post, HttpVerb.Put, HttpVerb.Patch].includes(endpoint.method) &&
-                        !!endpoint.body &&
-                        Object.keys(endpoint.body).length > 0,
-                    `, { ${Object.entries(endpoint.body || {})
-                        .map(([name, { spread }]) => `${spread ? '...' : ''}${name}`)
-                        .join(', ')} }`
-                )
-                .conditionalWrite(
-                    !!endpoint.query && Object.keys(endpoint.query).length > 0,
-                    `, { params: { ${Object.entries(endpoint.query || {})
-                        .map(([name, { spread }]) => `${spread ? '...' : ''}${name}`)
-                        .join(', ')} } }`
-                )
-                .write(`).then((res) => res.data);`);
-        });
+        .write(`${endpoint.functionName}(${functionParams.join(', ')}): Promise<${endpoint.returnType}> {`)
+        .newLine()
+        .indent()
+        .indent()
+        .write(
+            `return this.client.${endpoint.method.toLowerCase()}<${endpoint.returnType}>(\`${interpolateParams(
+                endpoint.path,
+                endpoint.params
+            )}\``
+        )
+        .conditionalWrite(
+            [HttpVerb.Post, HttpVerb.Put, HttpVerb.Patch].includes(endpoint.method) &&
+                !!endpoint.body &&
+                Object.keys(endpoint.body).length > 0,
+            `, { ${Object.entries(endpoint.body || {})
+                .map(([name, { spread }]) => `${spread ? '...' : ''}${name}`)
+                .join(', ')} }`
+        )
+        .conditionalWrite(
+            !!endpoint.query && Object.keys(endpoint.query).length > 0,
+            `, { params: { ${Object.entries(endpoint.query || {})
+                .map(([name, { spread }]) => `${spread ? '...' : ''}${name}`)
+                .join(', ')} } }`
+        )
+        .write(`).then((res) => res.data);`);
+    writer
+        .newLine()
+        .indent()
+        .write('}');
 };
 
 export const generateClient = (endpoints: ApiEndpoint[]) => (writer: CodeBlockWriter) => {
@@ -63,9 +68,17 @@ export const generateClient = (endpoints: ApiEndpoint[]) => (writer: CodeBlockWr
     writer.writeLine('* This file is generated automatically. It should not be modified directly.');
     writer.writeLine('*/');
     writer.blankLine();
+    writer.writeLine("import { AxiosInstance } from 'axios';");
+    writer.blankLine();
+    writer.writeLine('export class DataService {');
+    writer.indent(() => {
+        writer.writeLine('constructor(private client: AxiosInstance) {}');
+    });
+    writer.blankLine();
     for (const endpoint of endpoints) {
         writeEndpoint(writer, endpoint);
         writer.blankLine();
     }
+    writer.writeLine('}');
     writer.blankLine();
 };
