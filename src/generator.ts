@@ -32,12 +32,12 @@ const writeEndpoint = (writer: CodeBlockWriter, endpoint: ApiEndpoint) => {
         .indent()
 
         // export const getOrder = async (orderId: string): Promise<Order> =>
-        .write(`${endpoint.functionName}(${functionParams.join(', ')}): Promise<${endpoint.returnType}> {`)
+        .write(`${endpoint.functionName}(${functionParams.join(', ')}): Promise<Serialized<${endpoint.returnType}>> {`)
         .newLine()
         .indent()
         .indent()
         .write(
-            `return this.client.${endpoint.method.toLowerCase()}<${endpoint.returnType}>(\`${interpolateParams(
+            `return this.client.${endpoint.method.toLowerCase()}<Serialized<${endpoint.returnType}>>(\`${interpolateParams(
                 endpoint.path,
                 endpoint.params
             )}\``
