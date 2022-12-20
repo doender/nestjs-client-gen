@@ -76,6 +76,16 @@ const getMethodParams = (method: MethodDeclaration): ApiEndpointParamFields => {
         };
 
         for (const { name, spread } of decorators) {
+            // **ugly** super-special case for pagination
+            if (name === 'Pagination') {
+                paramFields['query'] = {
+                    ...paramFields['query'],
+                    perPage: { type: 'number', spread: false },
+                    page: { type: 'number', spread: false },
+                };
+                continue;
+            }
+
             const key = decoratorToKey[name];
             if (!key) continue;
             paramFields[key] = { ...paramFields[key], [paramName]: { type, spread } };
