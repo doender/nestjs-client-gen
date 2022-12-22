@@ -80,15 +80,14 @@ const getMethodParams = (method: MethodDeclaration): ApiEndpointParamFields => {
             if (name === 'Pagination') {
                 paramFields['query'] = {
                     ...paramFields['query'],
-                    perPage: { type: 'number', spread: false },
-                    page: { type: 'number', spread: false },
+                    pagination: { type: 'PaginateOptions', spread: true, optional: true },
                 };
                 continue;
             }
 
             const key = decoratorToKey[name];
             if (!key) continue;
-            paramFields[key] = { ...paramFields[key], [paramName]: { type, spread } };
+            paramFields[key] = { ...paramFields[key], [paramName]: { type, spread, optional: false } };
         }
     }
 

@@ -6,7 +6,7 @@ export enum HttpVerb {
     Patch = 'PATCH',
 }
 
-export type ApiEndpointParams = Record<string, { type: string; spread: boolean }>;
+export type ApiEndpointParams = Record<string, { type: string; spread: boolean; optional: boolean }>;
 
 export type ApiEndpointParamFields = { params?: ApiEndpointParams; body?: ApiEndpointParams; query?: ApiEndpointParams };
 

@@ -19,8 +19,8 @@ const interpolateParams = (path: string, params?: ApiEndpointParams) => {
 
 const writeEndpoint = (writer: CodeBlockWriter, endpoint: ApiEndpoint) => {
     const unrollParams = (params?: ApiEndpointParams) => [
-        ...Object.entries(params || {}).map(([name, { type }]) => {
-            return `${name}: ${type}`;
+        ...Object.entries(params || {}).map(([name, { type, optional }]) => {
+            return `${name}${optional ? '?' : ''}: ${type}`;
         }),
     ];
     const functionParams = [
